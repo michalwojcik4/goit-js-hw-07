@@ -4,13 +4,16 @@ const gallery = document.querySelector('.gallery');
 
 const addImgToGallery = galleryItems.map((galleryItem) => {
     const li = document.createElement('li')
-    li.classList.add('gallery__item')
     gallery.append(li)
+
+    const div = document.createElement('div');
+    div.classList.add('gallery__item');
+    li.append(div)
 
     const a = document.createElement('a');
     a.classList.add('gallery__link');
     a.href = galleryItem.original;
-    li.append(a);
+    div.append(a);
 
     const img = document.createElement('img');
     img.classList.add('gallery__image');
@@ -31,13 +34,16 @@ for(const item of items){
     
         const instance = basicLightbox.create(
             `<div class="modal">
-                <img width="1000" height="500" src="${imgOrginal}"/>
+                <img width="900" height="500" src="${imgOrginal}"/>
             </div>`
         );
         instance.show();
     
         const imgOrginalClose = document.querySelector('.modal img');
         imgOrginalClose.addEventListener('click', () => {
+            instance.close();
+        });
+        document.addEventListener('keydown', () => {
             instance.close();
         });
     });
