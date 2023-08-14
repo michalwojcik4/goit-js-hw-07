@@ -50,5 +50,9 @@ function showOrginalImg(e){
         instance.close();
       };
 
-    modal.addEventListener('click', closeModal);
+    if(instance.visible() === true){
+        modal.addEventListener('click', closeModal);
+    }else{
+        modal.removeEventListener('click', closeModal);
+    }
 }
