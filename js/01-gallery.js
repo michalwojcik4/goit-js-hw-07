@@ -1,50 +1,54 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
+
 const gallery = document.querySelector('.gallery');
 
-const addImgToGallery = galleryItems.map((galleryItem) => {
-    const li = document.createElement('li')
-    gallery.append(li)
+function createGallery(){
 
-    const div = document.createElement('div');
-    div.classList.add('gallery__item');
-    li.append(div)
+    for(const galleryItem of galleryItems){
+        const li = document.createElement('li');
 
-    const a = document.createElement('a');
-    a.classList.add('gallery__link');
-    a.href = galleryItem.original;
-    div.append(a);
+        const div = document.createElement('div');
+        div.classList.add('gallery__item');
+        
+        const a = document.createElement('a');
+        a.classList.add('gallery__link');
+        a.href = galleryItem.original;
+        
+        const img = document.createElement('img');
+        img.classList.add('gallery__image');
+        img.src = galleryItem.preview;
+        img.alt = galleryItem.description;
+        img.dataset.source = galleryItem.original;
 
-    const img = document.createElement('img');
-    img.classList.add('gallery__image');
-    img.src = galleryItem.preview;
-    img.dataset.source = galleryItem.original;
-    img.alt = galleryItem.description;
-    a.append(img);
-}).join('');
+        a.appendChild(img);
+        div.appendChild(a);
+        li.appendChild(div);
+        gallery.appendChild(li);
+    }; 
+}
 
-gallery.insertAdjacentHTML("beforeend", addImgToGallery);
+createGallery();
 
-const items = document.querySelectorAll('.gallery__item');
+gallery.addEventListener('click', showOrginalImg);
 
-for(const item of items){
-    item.addEventListener("click", (e) =>{
-        e.preventDefault();
-        const imgOrginal = e.target.dataset.source;
-    
-        const instance = basicLightbox.create(
-            `<div class="modal">
-                <img width="900" height="500" src="${imgOrginal}"/>
-            </div>`
-        );
-        instance.show();
-    
-        const imgOrginalClose = document.querySelector('.modal img');
-        imgOrginalClose.addEventListener('click', () => {
-            instance.close();
-        });
-        document.addEventListener('keydown', () => {
-            instance.close();
-        });
-    });
+function showOrginalImg(e){
+    e.preventDefault();
+    const imgOrginal = e.target.dataset.source;
+    if(!imgOrginal){return}
+        
+    const instance = basicLightbox.create(
+        `<div class="modal">
+            <img width="900" height="500" src="${imgOrginal}"/>
+        </div>`
+    );
+    instance.show();
+
+    const modal = document.querySelector('.modal img');
+
+    const closeModal = () => {
+        instance.close();
+      };
+
+    modal.addEventListener('click', closeModal);
 }
